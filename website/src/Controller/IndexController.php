@@ -25,18 +25,19 @@ class IndexController
      $this->homepageService = $homepageService;
      $this->pdo = $pdo;
   }
-
+  
   public function homepage() 
   {
-    echo $this->template->render("hello.html.php");
-    
-    while ($row = $this->pdo->mysqli_fetch_array($this->homepageService->getAllPost())) 
-    {
+    echo $this->template->render("hello.html.php");    
+    $result = $this->homepageService->getAllPost();
+    echo "<table>";
+    foreach ($result as $row) {
     	echo "<tr>";
-    	echo "<td>" . $row['FirstName'] . "</td>";
-    	echo "<td>" . $row['LastName'] . "</td>";
+    	echo "<td>" .$row['title'] . "</td>";
+    	echo "<td>" .$row['content'] . "</td>";
     	echo "</tr>";
     }
+    echo "</table>";
   }
   public function greet($name) 
   {
