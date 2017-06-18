@@ -16,7 +16,6 @@ class HomepagePdoService implements  HomepageService
 	public function getAllPost()
 	{	
 		try {
-			//$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$stmt = $this->pdo->prepare("Select * FROM post");
 			$stmt->execute();
 			
@@ -32,11 +31,5 @@ class HomepagePdoService implements  HomepageService
 		catch(PDOException $e) {
 			return "Error: " . $e->getMessage();
 		}
-		
-		
-		
-		/*$sql = "SELECT * FROM post";
-		$result = $this->pdo->query($sql);
-		return $result;*/
 	}
 }

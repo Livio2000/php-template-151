@@ -30,13 +30,14 @@ class IndexController
   {
     echo $this->template->render("hello.html.php");    
     $result = $this->homepageService->getAllPost();
-    echo "<table>";
+    echo "<table border='1'>";
     foreach ($result as $row) {
     	echo "<tr>";
     	echo "<td>" .$row['title'] . "</td>";
     	echo "<td>" .$row['content'] . "</td>";
     	echo "</tr>";
     }
+    echo "<button type='button' id='berechnen'>Like</button>";
     echo "</table>";
   }
   public function greet($name) 
