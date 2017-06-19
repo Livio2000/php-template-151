@@ -28,18 +28,51 @@ class IndexController
   
   public function homepage() 
   {
-    echo $this->template->render("hello.html.php");    
-    $result = $this->homepageService->getAllPost();
-    echo "<table border='1'>";
-    foreach ($result as $row) {
-    	echo "<tr>";
-    	echo "<td>" .$row['title'] . "</td>";
-    	echo "<td>" .$row['content'] . "</td>";
-    	echo "</tr>";
-    }
-    echo "<button type='button' id='berechnen'>Like</button>";
-    echo "</table>";
+  	$posts = $this->homepageService->getAllPost();
+  	$likes = $this->homepageService->getAllLikes();
+    echo $this->template->render("hello.html.php", array('posts' => $posts, 'likes' => $likes));  
   }
+  
+  public function like(array $data)
+  {
+  	$like = $this->homepageService->getLikeByUserIdAndPostId($_SESSION['user_id'], $data{"post_id"});
+  	if($like != false)
+  	{  			
+  		if ($like['isDislike'] == 1)
+  		{
+  			$this->homepageService->changeLike($_SESSION['user_id'], $data{"post_id"}, 0);
+  		}
+  		if ($like['isDislike'] == 0)
+  		{
+  			$this->homepageService->removeLike($_SESSION['user_id'], $data{"post_id"});
+  		}
+  	}
+  	else 
+  	{
+  		$this->homepageService->addLike($_SESSION['user_id'], $data{"post_id"}, 0);
+  	}
+  }
+  
+  public function dislike(array $data)
+  {
+  	$like = $this->homepageService->getLikeByUserIdAndPostId($_SESSION['user_id'], $data{"post_id"});
+  	if($like != false)
+  	{
+  		if ($like['isDislike'] == 1)
+  		{
+  			$this->homepageService->removeLike($_SESSION['user_id'], $data{"post_id"});
+  		}
+  		if ($like['isDislike'] == 0)
+  		{
+  			$this->homepageService->changeLike($_SESSION['user_id'], $data{"post_id"}, 1);
+  		}
+  	}
+  	else
+  	{
+  		$this->homepageService->addLike($_SESSION['user_id'], $data{"post_id"}, 1);
+  	}
+  }
+  
   public function greet($name) 
   {
   	echo $this->template->render("hello.html.php", ["name" => $name]);

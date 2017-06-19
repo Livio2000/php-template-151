@@ -1,7 +1,7 @@
 <!Doctype>
 <html>
 <head>
-	<link rel="stylesheet" href="/php-template-151/Design.css" type="text/css">
+	<link rel="stylesheet" href="/Design/design.css">
  	<title>Login</title>
 </head>
 <body>

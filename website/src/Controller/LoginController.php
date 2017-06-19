@@ -39,6 +39,7 @@ class LoginController
 		
 		if($this->loginService->authenticate($data{"email"}, $data{"password"}))
 		{
+			$_SESSION["user_id"] = $this->loginService->getUserIdByEmail($data["email"]);
 			$_SESSION["email"] = $data["email"];
 			header('Location: /');
 		}

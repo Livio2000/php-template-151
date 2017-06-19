@@ -5,6 +5,7 @@ use livio\Factory;
 
 error_reporting(E_ALL);
 
+session_start();
 require_once("../vendor/autoload.php");
 $config = parse_ini_file(__DIR__ . "/../config.ini", true);
 $factory = new Factory($config);
@@ -19,6 +20,12 @@ switch($_SERVER["REQUEST_URI"]) {
 		break;
 	case "/":
 		$ctr = new Controller\IndexController($tmpl, $homepageService, $pdo);
+		if($_SERVER["REQUEST_METHOD"] == "POST")
+		{
+			if(array_key_exists('like',$_POST)){
+				$ctr->like($_POST);
+			}
+		}
 		$ctr->homepage();
 		break;
 	case "/login":

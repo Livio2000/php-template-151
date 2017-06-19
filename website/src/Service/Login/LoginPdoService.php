@@ -30,4 +30,22 @@ class LoginPdoService implements  LoginService
 			return false;
 		}	
 	}
+	public function getUserIdByEmail($email)
+	{
+		$stmt = $this->pdo->prepare("Select * FROM user WHERE email=?");
+		$stmt->bindValue(1,$email);
+		$stmt->execute();
+		
+		if($stmt->rowCount() === 1)
+		{
+			foreach ($stmt as $row)
+			{
+				return $row['id'];
+			}
+		}
+		else 
+		{
+			return false;
+		}
+	}
 }
