@@ -22,8 +22,21 @@ switch($_SERVER["REQUEST_URI"]) {
 		$ctr = new Controller\IndexController($tmpl, $homepageService, $pdo);
 		if($_SERVER["REQUEST_METHOD"] == "POST")
 		{
-			if(array_key_exists('like',$_POST)){
+			if(array_key_exists('like',$_POST))
+			{	
 				$ctr->like($_POST);
+			}
+			if(array_key_exists('dislike',$_POST))
+			{
+				$ctr->dislike($_POST);
+			}
+			if(array_key_exists('logout',$_POST))
+			{
+				$_SESSION['user_id'] = "";
+			}
+			if(array_key_exists('login',$_POST))
+			{
+				header('Location: /login');
 			}
 		}
 		$ctr->homepage();

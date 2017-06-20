@@ -4,6 +4,7 @@ namespace livio\Controller;
 
 use livio\SimpleTemplateEngine;
 use livio\Service\Homepage\HomepageService;
+use livio\Service\Security\CSRFProtectionService;
 
 class IndexController 
 {
@@ -16,18 +17,22 @@ class IndexController
   
   private $pdo;
   
+  private $csrfProtectionService;
+  
   /**
    * @param ihrname\SimpleTemplateEngine
    */
-  public function __construct(SimpleTemplateEngine $template, HomepageService $homepageService, \PDO $pdo)
+  public function __construct(SimpleTemplateEngine $template, HomepageService $homepageService, \PDO $pdo, CSRFProtectionService $csrfProtectionService)
   {
      $this->template = $template;
      $this->homepageService = $homepageService;
      $this->pdo = $pdo;
+     $this->csrfProtectionService = $csrfProtectionService;
   }
   
   public function homepage() 
   {
+  	echo $_SESSION['user_id'];
   	$posts = $this->homepageService->getAllPost();
   	$likes = $this->homepageService->getAllLikes();
     echo $this->template->render("hello.html.php", array('posts' => $posts, 'likes' => $likes));  
@@ -35,46 +40,55 @@ class IndexController
   
   public function like(array $data)
   {
-  	$like = $this->homepageService->getLikeByUserIdAndPostId($_SESSION['user_id'], $data{"post_id"});
-  	if($like != false)
-  	{  			
-  		if ($like['isDislike'] == 1)
-  		{
-  			$this->homepageService->changeLike($_SESSION['user_id'], $data{"post_id"}, 0);
-  		}
-  		if ($like['isDislike'] == 0)
-  		{
-  			$this->homepageService->removeLike($_SESSION['user_id'], $data{"post_id"});
-  		}
-  	}
-  	else 
+  	if ($_SESSION['user_id'] != "")
   	{
-  		$this->homepageService->addLike($_SESSION['user_id'], $data{"post_id"}, 0);
+  		$like = $this->homepageService->getLikeByUserIdAndPostId($_SESSION['user_id'], $data{"like"});
+  		if($like != NULL)
+  		{
+  			if ($like['isDislike'] == 1)
+  			{
+  				$this->homepageService->changeLike($like['id'], 0);
+  			}
+  			else if ($like['isDislike'] == 0)
+  			{
+  				$this->homepageService->removeLike($like['id']);
+  			}
+  		}
+  		else
+  		{
+  			$this->homepageService->addLike($_SESSION['user_id'], $data{"like"}, 0);
+  		}
   	}
+	else
+	{
+		header('Location: /login');
+	}
   }
   
   public function dislike(array $data)
   {
-  	$like = $this->homepageService->getLikeByUserIdAndPostId($_SESSION['user_id'], $data{"post_id"});
-  	if($like != false)
+  	if ($_SESSION['user_id'] != "")
   	{
-  		if ($like['isDislike'] == 1)
+  		$like = $this->homepageService->getLikeByUserIdAndPostId($_SESSION['user_id'], $data{"dislike"});
+  		if($like != NULL)
   		{
-  			$this->homepageService->removeLike($_SESSION['user_id'], $data{"post_id"});
+  			if ($like['isDislike'] == 0)
+  			{
+  				$this->homepageService->changeLike($like['id'], 1);
+  			}
+  			else if ($like['isDislike'] == 1)
+  			{
+  				$this->homepageService->removeLike($like['id']);
+  			}
   		}
-  		if ($like['isDislike'] == 0)
+  		else
   		{
-  			$this->homepageService->changeLike($_SESSION['user_id'], $data{"post_id"}, 1);
+  			$this->homepageService->addLike($_SESSION['user_id'], $data{"dislike"}, 1);
   		}
   	}
   	else
   	{
-  		$this->homepageService->addLike($_SESSION['user_id'], $data{"post_id"}, 1);
+  		header('Location: /login');
   	}
-  }
-  
-  public function greet($name) 
-  {
-  	echo $this->template->render("hello.html.php", ["name" => $name]);
   }
 }

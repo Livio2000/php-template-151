@@ -44,7 +44,7 @@ class HomepagePdoService implements  HomepageService
 			}
 			else
 			{
-				return false;
+				return NULL;
 			}
 		}
 		catch(PDOException $e) {
@@ -63,12 +63,12 @@ class HomepagePdoService implements  HomepageService
 			{
 				foreach ($stmt as $row)
 				{
-					return $stmt;
+					return $row;
 				}
 			}
 			else
 			{
-				return false;
+				return NULL;
 			}
 		}
 		catch(PDOException $e) {
@@ -78,7 +78,7 @@ class HomepagePdoService implements  HomepageService
 	public function addLike($user_id, $post_id, $isDislike)
 	{
 		try {
-			$stmt = $this->pdo->prepare("INSERT INTO `like`(user_id, post_id, isDislike) VALUES (?,?,?)");
+			$stmt = $this->pdo->prepare("INSERT INTO `like` (user_id, post_id, isDislike) VALUES (? , ?, ?)");
 			$stmt->bindValue(1,$user_id);
 			$stmt->bindValue(2,$post_id);
 			$stmt->bindValue(3, $isDislike);
@@ -88,26 +88,23 @@ class HomepagePdoService implements  HomepageService
 			return "Error: " . $e->getMessage();
 		}
 	}
-	public function changeLike($user_id, $post_id, $isDislike)
+	public function changeLike($like_id, $isDislike)
 	{
 		try {
-			$stmt = $this->pdo->prepare("UPDATE `like` SET isDislike=? WHERE user_id=? AND post_id=?");
+			$stmt = $this->pdo->prepare("UPDATE `like` SET isDislike=? WHERE id=?");
 			$stmt->bindValue(1,$isDislike);
-			$stmt->bindValue(2,$user_id);
-			$stmt->bindValue(3, $post_id);
+			$stmt->bindValue(2,$like_id);
 			$stmt->execute();
-		
 		}
 		catch(PDOException $e) {
 			return "Error: " . $e->getMessage();
 		}
 	}
-	public function removeLike($user_id, $post_id)
+	public function removeLike($like_id)
 	{
 		try {
-			$stmt = $this->pdo->prepare("Select * FROM `like` WHERE user_id=? AND post_id=?");
-			$stmt->bindValue(1,$user_id);
-			$stmt->bindValue(2,$post_id);
+			$stmt = $this->pdo->prepare("DELETE FROM `like` WHERE id=?");
+			$stmt->bindValue(1,$like_id);
 			$stmt->execute();
 		}
 		catch(PDOException $e) {

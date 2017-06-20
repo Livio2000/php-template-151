@@ -7,6 +7,6 @@ Interface HomepageService
 	public function getAllLikes();
 	public function getLikeByUserIdAndPostId($user_id, $post_id);
 	public function addLike($user_id, $post_id, $isDislike);
-	public function changeLike($user_id, $post_id, $isDislike);
-	public function removeLike($user_id, $post_id);
+	public function changeLike($like_id, $isDislike);
+	public function removeLike($like_id);
 }

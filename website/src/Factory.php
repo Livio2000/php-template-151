@@ -47,4 +47,9 @@ class Factory
 				->setPassword("Pe$6A+aprunu")
 				);
 	}
+	
+	public function getCSRFService() 
+	{
+		return new Service\Security\CSRFProtectionService();
+	}
 }
