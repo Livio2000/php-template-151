@@ -52,6 +52,10 @@ else
 				{
 					header('Location: /login');
 				}
+				if(array_key_exists('register',$_POST))
+				{
+					header('Location: /register');
+				}
 			}
 			$ctr->homepage();
 			break;

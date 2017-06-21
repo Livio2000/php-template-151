@@ -22,6 +22,13 @@
 					   	<Button type='submit'>Logout</Button>
 				   </form>";
 		}
+		if($_SESSION['user_id'] == "")
+		{
+			echo "<form id='register' method='post'>
+					<input type='hidden' name='register' id='register'></input>
+					<Button type='submit'>Register</Button>
+      			  </form>";
+		}
 	echo "<table border='1'>";
 	echo "<tr><th>Title</th> <th>Content</th> <th></th> <th>Likes</th> <th>Dislikes</th></tr>";
 	if($posts != NULL)

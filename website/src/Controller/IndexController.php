@@ -32,7 +32,6 @@ class IndexController
   
   public function homepage() 
   {
-  	echo $_SESSION['user_id'];
   	$posts = $this->homepageService->getAllPost();
   	$likes = $this->homepageService->getAllLikes();
     echo $this->template->render("hello.html.php", array('posts' => $posts, 'likes' => $likes));  
