@@ -25,7 +25,7 @@ class HomepagePdoService implements  HomepageService
 			}
 			else
 			{
-				return false;	
+				return NULL;	
 			}
 		}
 		catch(PDOException $e) {

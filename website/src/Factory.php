@@ -31,7 +31,7 @@ class Factory
 	
 	public function getLoginService()
 	{
-		return new  Service\Login\LoginPdoService($this->getPDO());
+		return new  Service\Login\LoginPdoService($this->getPDO(), $this->getPasswordService());
 	}
 	
 	public function getHomepageService()
@@ -48,8 +48,17 @@ class Factory
 				);
 	}
 	
+	public function getRegisterService()
+	{
+		return new Service\Register\RegisterPdoService($this->getPDO(), $this->getMailer(), $this->getPasswordService());
+	}
+	
 	public function getCSRFService() 
 	{
 		return new Service\Security\CSRFProtectionService();
+	}
+	
+	public function getPasswordService() {
+		return new Service\Security\PasswordService();
 	}
 }

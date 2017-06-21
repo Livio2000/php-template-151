@@ -18,8 +18,6 @@ CREATE TABLE `comment` (
   CONSTRAINT `comment_ibfk_3` FOREIGN KEY (`post_id`) REFERENCES `post` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `comment` (`id`, `user_id`, `post_id`, `content`) VALUES
-(1,	1,	1,	'Cool post man!');
 
 DROP TABLE IF EXISTS `like`;
 CREATE TABLE `like` (
@@ -34,8 +32,6 @@ CREATE TABLE `like` (
   CONSTRAINT `like_ibfk_2` FOREIGN KEY (`post_id`) REFERENCES `post` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `like` (`id`, `user_id`, `post_id`, `isDislike`) VALUES
-(1,	1,	1,	0);
 
 DROP TABLE IF EXISTS `post`;
 CREATE TABLE `post` (
@@ -49,7 +45,8 @@ CREATE TABLE `post` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `post` (`id`, `user_id`, `title`, `content`) VALUES
-(1,	1,	'My first post',	'This is my first post!');
+(1,	3,	'First post!',	'This is my first post!'),
+(2,	3,	'second Post',	'This is my second post!');
 
 DROP TABLE IF EXISTS `right`;
 CREATE TABLE `right` (
@@ -71,14 +68,16 @@ CREATE TABLE `user` (
   `right_id` int(11) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `username` varchar(255) NOT NULL,
+  `isActivated` tinyint(4) NOT NULL,
+  `activationCode` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   KEY `right_id` (`right_id`),
   CONSTRAINT `user_ibfk_1` FOREIGN KEY (`right_id`) REFERENCES `right` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `user` (`id`, `right_id`, `email`, `password`, `username`) VALUES
-(1,	1,	'livio.1234567890@gmail.com',	'12345',	'Livio');
+INSERT INTO `user` (`id`, `right_id`, `email`, `password`, `isActivated`, `activationCode`) VALUES
+(3,	1,	'livio.1234567890@gmail.com',	'$2y$10$yXFHsEZaJt7aqD06nzUXE.6q7b.hx2MpumJpa6.wS3aXD8BulABcW',	1,	'jnv1DOwHWWRLoGqk'),
+(4,	1,	'mario.gwerder@gmail.com',	'$2y$10$8H0wdWJL28dA7/Z6kUhQeex8MLmXHsnMo6FIwfbI9Q.iyCqlNy8Xy',	1,	'DCj006wBPe2Q5Gv5');
 
--- 2017-06-18 12:47:14
+-- 2017-06-21 19:00:13

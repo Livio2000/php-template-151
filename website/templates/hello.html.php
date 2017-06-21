@@ -24,12 +24,14 @@
 		}
 	echo "<table border='1'>";
 	echo "<tr><th>Title</th> <th>Content</th> <th></th> <th>Likes</th> <th>Dislikes</th></tr>";
-	foreach ($posts as $row)
+	if($posts != NULL)
 	{
-		echo "<tr>";
-		echo "<td>" .$row['title'] . "</td>";
-		echo "<td>" .$row['content'] . "</td>";
-		echo "<td>" . "<form id='like' method='post'>
+		foreach ($posts as $row)
+		{
+			echo "<tr>";
+			echo "<td>" .$row['title'] . "</td>";
+			echo "<td>" .$row['content'] . "</td>";
+			echo "<td>" . "<form id='like' method='post'>
 					   	<input type='hidden' name='like' id='like' value=".$row['id']."></input>
 					   	<Button type='submit'>Like</Button>
 					  </form>
@@ -37,28 +39,29 @@
 						<input type='hidden' name='dislike' id='dislike' value=".$row['id']."></input>
 						<Button type='submit'>Dislike</Button>
 					  </form>"  . "</td>";
-		$likesNumber = 0;
-		$dislikes = 0;
-		if($likes != NULL)
-		{
-			foreach ($likes as $like)
+			$likesNumber = 0;
+			$dislikes = 0;
+			if($likes != NULL)
 			{
-				if ($like['post_id'] == $row['id'])
+				foreach ($likes as $like)
 				{
-					if($like['isDislike'] == 0)
+					if ($like['post_id'] == $row['id'])
 					{
-						$likesNumber++;
-					}
-					else
-					{
-						$dislikes++;
+						if($like['isDislike'] == 0)
+						{
+							$likesNumber++;
+						}
+						else
+						{
+							$dislikes++;
+						}
 					}
 				}
 			}
+			echo "<td>".$likesNumber."</td>";
+			echo "<td>".$dislikes."</td>";
+			echo "</tr>";
 		}
-		echo "<td>".$likesNumber."</td>";
-		echo "<td>".$dislikes."</td>";
-		echo "</tr>";
 	}
 	echo "</table>";
 	?>
