@@ -5,3 +5,9 @@ body {
 h1 {
     font-size: 40px;
 }
+form {
+	float:left;
+}
+table{
+	clear:left;
+}

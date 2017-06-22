@@ -72,7 +72,7 @@ class LoginPdoService implements  LoginService
 		}
 		else 
 		{
-			return false;
+			return NULL;
 		}
 	}
 }

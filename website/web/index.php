@@ -34,7 +34,6 @@ else
 			break;
 		case "/":
 			$ctr = new Controller\IndexController($tmpl, $homepageService, $pdo, $factory->getCSRFService());
-			$_SESSION['user_id'] = "";
 			if($_SERVER["REQUEST_METHOD"] == "POST")
 			{
 				if(array_key_exists('like',$_POST))

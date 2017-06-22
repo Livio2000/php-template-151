@@ -7,13 +7,12 @@
 <body>
 	<h1>Livio's Blog</h1>
 	<?php
-		if($_SESSION['user_id'] == "")
+		if($_SESSION['user_id'] == NULL)
 		{
 			echo "<form id='login' method='post'>
 						<input type='hidden' name='login' id='login'></input>
 					   	<Button type='submit'>Login</Button>
 				   </form>";
-			
 		}
 		else 
 		{
@@ -22,14 +21,14 @@
 					   	<Button type='submit'>Logout</Button>
 				   </form>";
 		}
-		if($_SESSION['user_id'] == "")
+		if($_SESSION['user_id'] == NULL)
 		{
 			echo "<form id='register' method='post'>
 					<input type='hidden' name='register' id='register'></input>
 					<Button type='submit'>Register</Button>
       			  </form>";
 		}
-		if($_SESSION['user_id'] != "")
+		if($_SESSION['user_id'] != NULL)
 		{
 			echo "<a href='newPost'>New Post</a>";
 		}
@@ -40,8 +39,8 @@
 		foreach ($posts as $row)
 		{
 			echo "<tr>";
-			echo "<td>" .$row['title'] . "</td>";
-			echo "<td>" .$row['content'] . "</td>";
+			echo "<td>" ?><?=htmlspecialchars($row['title'])?><?php "</td>";
+			echo "<td>" ?><?=htmlspecialchars($row['content'])?><?php "</td>";
 			echo "<td>" . "<form id='like' method='post'>
 					   	<input type='hidden' name='like' id='like' value=".$row['id']."></input>
 					   	<Button type='submit'>Like</Button>
@@ -71,12 +70,15 @@
 			}
 			echo "<td>".$likesNumber."</td>";
 			echo "<td>".$dislikes."</td>";
-			if ($_SESSION['user_id'] == $row['user_id'])
+			if ($_SESSION['user_id'] != NULL)
 			{
-				echo "<td><form id='deletePost' method='post'>
-					   		<input type='hidden' name='deletePost' id='deletePost' value=".$row['id']."></input>
-					   	<Button type='submit'>Delete</Button>
-					  </form></td>";
+				if ($_SESSION['user_id'] == $row['user_id'])
+				{
+					echo "<td><form id='deletePost' method='post'>
+						   		<input type='hidden' name='deletePost' id='deletePost' value=".$row['id']."></input>
+						   	<Button type='submit'>Delete</Button>
+						  </form></td>";
+				}
 			}
 			echo "</tr>";
 		}

@@ -5,20 +5,6 @@ SET time_zone = '+00:00';
 SET foreign_key_checks = 0;
 SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
-DROP TABLE IF EXISTS `comment`;
-CREATE TABLE `comment` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `post_id` int(11) NOT NULL,
-  `content` varchar(255) CHARACTER SET armscii8 NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  KEY `post_id` (`post_id`),
-  CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `comment_ibfk_3` FOREIGN KEY (`post_id`) REFERENCES `post` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
 DROP TABLE IF EXISTS `like`;
 CREATE TABLE `like` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -46,7 +32,7 @@ CREATE TABLE `post` (
 
 INSERT INTO `post` (`id`, `user_id`, `title`, `content`) VALUES
 (1,	3,	'First post!',	'This is my first post!'),
-(2,	3,	'second Post',	'This is my second post!');
+(6,	3,	'Second Post',	'This is my Second Post');
 
 DROP TABLE IF EXISTS `right`;
 CREATE TABLE `right` (
@@ -80,4 +66,4 @@ INSERT INTO `user` (`id`, `right_id`, `email`, `password`, `isActivated`, `activ
 (3,	1,	'livio.1234567890@gmail.com',	'$2y$10$yXFHsEZaJt7aqD06nzUXE.6q7b.hx2MpumJpa6.wS3aXD8BulABcW',	1,	'jnv1DOwHWWRLoGqk'),
 (4,	1,	'mario.gwerder@gmail.com',	'$2y$10$8H0wdWJL28dA7/Z6kUhQeex8MLmXHsnMo6FIwfbI9Q.iyCqlNy8Xy',	1,	'DCj006wBPe2Q5Gv5');
 
--- 2017-06-21 19:00:13
+-- 2017-06-22 08:16:15

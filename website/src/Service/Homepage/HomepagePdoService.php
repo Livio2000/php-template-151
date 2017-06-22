@@ -127,9 +127,6 @@ class HomepagePdoService implements  HomepageService
 	public function deletePost($post_id)
 	{
 		try {
-			$stmt = $this->pdo->prepare("DELETE FROM `comment` WHERE post_id=?");
-			$stmt->bindValue(1,$post_id);
-			$stmt->execute();
 			$stmt = $this->pdo->prepare("DELETE FROM `like` WHERE post_id=?");
 			$stmt->bindValue(1,$post_id);
 			$stmt->execute();
