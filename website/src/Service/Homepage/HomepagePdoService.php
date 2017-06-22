@@ -111,4 +111,34 @@ class HomepagePdoService implements  HomepageService
 			return "Error: " . $e->getMessage();
 		}
 	}
+	public function addPost($user_id, $title, $content)
+	{
+		try {
+			$stmt = $this->pdo->prepare("INSERT INTO `post`(user_id, title, content) VALUES (? , ?, ?)");
+			$stmt->bindValue(1,$user_id);
+			$stmt->bindValue(2,$title);
+			$stmt->bindValue(3,$content);
+			$stmt->execute();
+		}
+		catch(PDOException $e) {
+			return "Error: " . $e->getMessage();
+		}
+	}
+	public function deletePost($post_id)
+	{
+		try {
+			$stmt = $this->pdo->prepare("DELETE FROM `comment` WHERE post_id=?");
+			$stmt->bindValue(1,$post_id);
+			$stmt->execute();
+			$stmt = $this->pdo->prepare("DELETE FROM `like` WHERE post_id=?");
+			$stmt->bindValue(1,$post_id);
+			$stmt->execute();
+			$stmt = $this->pdo->prepare("DELETE FROM `post` WHERE id=?");
+			$stmt->bindValue(1,$post_id);
+			$stmt->execute();
+		}
+		catch(PDOException $e) {
+			return "Error: " . $e->getMessage();
+		}
+	}
 }

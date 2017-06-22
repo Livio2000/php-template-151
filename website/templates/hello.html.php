@@ -29,6 +29,10 @@
 					<Button type='submit'>Register</Button>
       			  </form>";
 		}
+		if($_SESSION['user_id'] != "")
+		{
+			echo "<a href='newPost'>New Post</a>";
+		}
 	echo "<table border='1'>";
 	echo "<tr><th>Title</th> <th>Content</th> <th></th> <th>Likes</th> <th>Dislikes</th></tr>";
 	if($posts != NULL)
@@ -67,6 +71,13 @@
 			}
 			echo "<td>".$likesNumber."</td>";
 			echo "<td>".$dislikes."</td>";
+			if ($_SESSION['user_id'] == $row['user_id'])
+			{
+				echo "<td><form id='deletePost' method='post'>
+					   		<input type='hidden' name='deletePost' id='deletePost' value=".$row['id']."></input>
+					   	<Button type='submit'>Delete</Button>
+					  </form></td>";
+			}
 			echo "</tr>";
 		}
 	}

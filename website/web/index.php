@@ -34,6 +34,7 @@ else
 			break;
 		case "/":
 			$ctr = new Controller\IndexController($tmpl, $homepageService, $pdo, $factory->getCSRFService());
+			$_SESSION['user_id'] = "";
 			if($_SERVER["REQUEST_METHOD"] == "POST")
 			{
 				if(array_key_exists('like',$_POST))
@@ -55,6 +56,10 @@ else
 				if(array_key_exists('register',$_POST))
 				{
 					header('Location: /register');
+				}
+				if(array_key_exists('deletePost',$_POST))
+				{
+					$ctr->deletePost($_POST);
 				}
 			}
 			$ctr->homepage();
@@ -93,6 +98,17 @@ else
 			else
 			{
 				$ctr->changePw($_POST);
+			}
+			break;
+		case "/newPost":
+			$ctr = $factory->getIndexController();
+			if(array_key_exists('newPost',$_POST))
+			{
+				$ctr->addPost($_POST);
+			}
+			else 
+			{
+				$ctr->showNewPost();
 			}
 			break;
 		default:

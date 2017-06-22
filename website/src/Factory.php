@@ -17,7 +17,7 @@ class Factory
 	
 	public function getIndexController()
 	{
-		return new Controller\IndexController($this->getTemplateEngine(), $this->getHomepageService(), $this->getPDO());
+		return new Controller\IndexController($this->getTemplateEngine(), $this->getHomepageService(), $this->getPDO(), $this->getCSRFService());
 	}
 	
 	public function getPDO()

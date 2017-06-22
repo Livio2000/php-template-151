@@ -90,4 +90,20 @@ class IndexController
   		header('Location: /login');
   	}
   }
+  
+  public function showNewPost()
+  {
+  	echo $this->template->render("newPost.html.php");
+  }
+  
+  public function addPost(array $data)
+  {
+  	$this->homepageService->addPost($_SESSION['user_id'],$data{"title"}, $data{"content"});
+  	header("Location: /");
+  }
+  
+  public function deletePost(array $data)
+  {
+  	$this->homepageService->deletePost($data{"deletePost"});
+  }
 }
