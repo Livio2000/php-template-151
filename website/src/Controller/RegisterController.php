@@ -81,33 +81,34 @@ class RegisterController
 		{
 			if(!$this->csrfService->validateToken("csrfChangePW", $data["csrf"]))
 			{
-				$this->showChangePw();
+				$this->showChangePw(true);
 				return;
 			}
 		}
 		else
 		{
-			$this->showChangePw();
+			$this->showChangePw(true);
 			return;
 		}
 		if(!array_key_exists("password", $data) OR !array_key_exists("code", $data))
 		{
-			$this->showChangePw();
+			$this->showChangePw(true);
 		}
 		else
-		{
+		{ 
 			$this->registerService->chpw($data["password"], $data["code"]);
+			header("Location:/ ");
 		}
 	}
 	
-	public function showChangePw()
+	public function showChangePw($codeSent)
 	{
-		echo $this->template->render("changePassword.html.php", ["csrf" => $this->csrfService->getHtmlCode("csrfChangePW")]);
+		echo $this->template->render("changePassword.html.php", array('codeSent' => $codeSent, "csrf" => $this->csrfService->getHtmlCode("csrfChangePW")));
 	}
 	
-	public function sendChangePwCode()
+	public function sendChangePwCode(array $email)
 	{
-		$this->registerService->sendCode();
+		$this->registerService->sendCode($email['email']);
 	}
 }
 		

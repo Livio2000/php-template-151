@@ -18,5 +18,6 @@
 		</label>
 		<input type="submit" name="login" value="Login">
 	</form>
+	<a href="changepw">Forgot Password?</a>
 </body>
 </html>

@@ -19,7 +19,7 @@ if(strpos($_SERVER["REQUEST_URI"], '/activate') !== false)
 	if($_SERVER["REQUEST_METHOD"] == "GET")
 	{
 		$registerService = $factory->getRegisterService();
-		$ctr = new Controller\RegisterController($tmpl, $registerService);
+		$ctr = new Controller\RegisterController($tmpl, $registerService, $factory->getCSRFService());
 		$ctr->activate($_GET);
 	}
 }
@@ -84,11 +84,22 @@ else
 			break;
 		case "/changepw":
 			$registerService = $factory->getRegisterService();
-			$ctr = new Controller\RegisterController($tmpl, $registerService);
+			$ctr = new Controller\RegisterController($tmpl, $registerService, $factory->getCSRFService());
 			if($_SERVER["REQUEST_METHOD"] == "GET")
 			{
-				$ctr->sendChangePwCode();
-				$ctr->showChangePw();
+				$ctr->showChangePw(false);
+			}
+			else if($_SERVER["REQUEST_METHOD"] == "POST")
+			{
+				if(array_key_exists('email',$_POST))
+				{
+					$ctr->sendChangePwCode($_POST);
+					$ctr->showChangePw(true);
+				}
+				if(array_key_exists('code',$_POST))
+				{
+					$ctr->changePw($_POST);
+				}
 			}
 			else
 			{

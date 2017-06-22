@@ -116,53 +116,33 @@ class RegisterPdoService implements  RegisterService
 							->setContentType("text/html")
 							->setFrom(["gibz.module.151@gmail.com" => "WebProject"])
 							->setTo($email)
-							->setBody("Registrierungsformular<br><a href=https://".$_SERVER['HTTP_HOST']."/activate?url=".$url."&userid=".$userid.">Link</a>")
+							->setBody("Registrierungsformular<br><a href=https://".$_SERVER['HTTP_HOST']."/activate?url=".$url."&user_id=".$userid.">Link</a>")
 							);
 		}	
-		private function getCurrentUser()
+		private function getUserByEmail($email)
 		{
-			if(isset($_SESSION['user_id']))
+			$stmt = $this->pdo->prepare("Select * FROM user WHERE email=?");
+			$stmt->bindValue(1, $email);
+			$stmt->execute();
+			foreach ($stmt as $row)
 			{
-				$userid = $_SESSION['user_id'];
-				$stmt = $this->pdo->prepare("Select * FROM user WHERE id=?");
-				$stmt->bindValue(1, $userid);
-				$stmt->execute();
-				foreach ($stmt as $row)
-				{
-					return $row;
-					break;
-				}
-			}
-			else
-			{
-				echo "you are not logged in <a href=https://".$_SERVER['HTTP_HOST']."/login>login</a>";
-			}
-		
+				return $row;
+				break;
+			}		
 		}
+		
 		public function chpw($pw, $url)
 		{
-			if(isset($_SESSION['user_id']))
-			{
-				$userid = $_SESSION['user_id'];
-				if($url == $this->getactivationCodeById($userid))
-				{
-					$securePW = $this->passwordService->gethash($pw);
-					$stmt = $this->pdo->prepare("UPDATE `user` SET password=? WHERE id=?");
-					$stmt->bindValue(1,$securePW);
-					$stmt->bindValue(2,$userid);
-					$stmt->execute();
-					echo "password has been changed";
-				}
-			}
-			else
-			{
-				echo "you are not logged in <a href=https://".$_SERVER['HTTP_HOST']."/login>login</a>";
-			}
+			$securePW = $this->passwordService->gethash($pw);
+			$stmt = $this->pdo->prepare("UPDATE `user` SET password=? WHERE activationCode=?");
+			$stmt->bindValue(1,$securePW);
+			$stmt->bindValue(2,$url);
+			$stmt->execute();
 		}
 		
-		public function sendCode()
+		public function sendCode($email)
 		{
-			$user = $this->getCurrentUser();
+			$user = $this->getUserByEmail($email);
 			$activationCode = $user['activationCode'];
 			$this->mailer->send(
 					\Swift_Message::newInstance("Change PW")
