@@ -7,6 +7,7 @@
 <body>
 	<h1>Register</h1>
 	<form method="POST">
+	<?php echo $csrf?>
 		<label>
 			Email:
 			<input type="email" name="email" value="<?= (isset($email)) ? htmlspecialchars($email) : "" ?>" />

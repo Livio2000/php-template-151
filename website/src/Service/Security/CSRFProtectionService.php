@@ -1,5 +1,6 @@
 <?php
 namespace livio\Service\Security;
+
 class CSRFProtectionService 
 {
 
@@ -21,17 +22,13 @@ class CSRFProtectionService
 		{
 			return $_SESSION[$key];
 		}
-		else 
-		{ 
-			return false; 
-		}
+		else { return false; }
 	}
 
 	public function validateToken($uid, $sentToken) 
 	{
 		$token = $this->get_from_session($uid);
-		if (!is_string($sentToken) OR !is_string($token)) 
-		{
+		if (!is_string($sentToken) OR !is_string($token)) {
 			return false;
 		}
 		$result = hash_equals($token, $sentToken);
@@ -45,7 +42,6 @@ class CSRFProtectionService
 		$this->store_in_session($uid,$token);
 		return $token;
 	}
-	
 	public function getHtmlCode($uid) 
 	{
 		return "<input type='hidden' name='csrf' value='".$this->generateToken($uid)."'/>";

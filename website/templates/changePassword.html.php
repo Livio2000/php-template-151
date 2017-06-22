@@ -7,6 +7,7 @@
 <body>
 	<h1>Change Password</h1>
 	<form method="POST">
+	<?php echo $csrf?>
 		<label>Secret Code:
 			<input type="text" name="code"/>
 		</label>

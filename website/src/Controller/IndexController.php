@@ -17,7 +17,7 @@ class IndexController
   
   private $pdo;
   
-  private $csrfProtectionService;
+  private $csrfService;
   
   /**
    * @param ihrname\SimpleTemplateEngine
@@ -27,7 +27,7 @@ class IndexController
      $this->template = $template;
      $this->homepageService = $homepageService;
      $this->pdo = $pdo;
-     $this->csrfProtectionService = $csrfProtectionService;
+     $this->csrfService = $csrfProtectionService;
   }
   
   public function homepage() 
@@ -53,11 +53,24 @@ class IndexController
 	  		$counter++;
 	  	}
   	}
-    echo $this->template->render("home.html.php", array('posts' => $posts));  
+    echo $this->template->render("home.html.php", array('posts' => $posts, 'csrf' => $this->csrfService->getHtmlCode("csrfIndex")));  
   }
   
   public function like(array $data)
   {
+  	if(array_key_exists("csrf", $data))
+  	{
+  		if(!$this->csrfService->validateToken("csrfIndex", $data["csrf"]))
+  		{
+  			$this->homepage();
+  			return;
+  		}
+  	}
+  	else
+  	{
+  		$this->homepage();
+  		return;
+  	}
   	if (isset($_SESSION['user_id']))
   	{
   		$like = $this->homepageService->getLikeByUserIdAndPostId($_SESSION['user_id'], $data["like"]);
@@ -85,6 +98,19 @@ class IndexController
   
   public function dislike(array $data)
   {
+  	if(array_key_exists("csrf", $data))
+  	{
+  		if(!$this->csrfService->validateToken("csrfIndex", $data["csrf"]))
+  		{
+  			$this->homepage();
+  			return;
+  		}
+  	}
+  	else
+  	{
+  		$this->homepage();
+  		return;
+  	}
   	if (isset($_SESSION['user_id']))
   	{
   		$like = $this->homepageService->getLikeByUserIdAndPostId($_SESSION['user_id'], $data["dislike"]);
@@ -112,17 +138,43 @@ class IndexController
   
   public function showNewPost()
   {
-  	echo $this->template->render("newPost.html.php");
+  	echo $this->template->render("newPost.html.php", ["csrf" => $this->csrfService->getHtmlCode("csrfNewPost")]);
   }
   
   public function addPost(array $data)
   {
+  	if(array_key_exists("csrf", $data))
+  	{
+  		if(!$this->csrfService->validateToken("csrfNewPost", $data["csrf"]))
+  		{
+  			$this->showNewPost();
+  			return;
+  		}
+  	}
+  	else
+  	{
+  		$this->showNewPost();
+  		return;
+  	}
   	$this->homepageService->addPost($_SESSION['user_id'],$data["title"], $data["content"]);
   	header("Location: /");
   }
   
   public function deletePost(array $data)
   {
+  	if(array_key_exists("csrf", $data))
+  	{
+  		if(!$this->csrfService->validateToken("csrfIndex", $data["csrf"]))
+  		{
+  			$this->homepage();
+  			return;
+  		}
+  	}
+  	else
+  	{
+  		$this->homepage();
+  		return;
+  	}
   	$this->homepageService->deletePost($data["deletePost"]);
   }
 }

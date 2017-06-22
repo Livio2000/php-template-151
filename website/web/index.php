@@ -72,7 +72,7 @@ else
 			break;
 		case "/register":
 			$registerService = $factory->getRegisterService();
-			$ctr = new Controller\RegisterController($tmpl, $registerService);
+			$ctr = new Controller\RegisterController($tmpl, $registerService, $factory->getCSRFService());
 			if($_SERVER["REQUEST_METHOD"] == "GET")
 			{
 				$ctr->showRegister();

@@ -4,6 +4,7 @@ namespace livio\Controller;
 
 use livio\SimpleTemplateEngine;
 use livio\Service\Register\RegisterService;
+use livio\Service\Security\CSRFProtectionService;
 
 class RegisterController
 {
@@ -13,23 +14,39 @@ class RegisterController
 	private $template;
 	
 	private $registerService;
+	
+	private $csrfService;
 	/**
 	 * @param ihrname\SimpleTemplateEngine
 	 * @param PDO
 	 */
-	public function __construct(SimpleTemplateEngine $template, RegisterService $registerService)
+	public function __construct(SimpleTemplateEngine $template, RegisterService $registerService, CSRFProtectionService $csrfProtection)
 	{
 		$this->template = $template;
 		$this->registerService = $registerService;
+		$this->csrfService = $csrfProtection;
 	}
 	
 	public function showRegister()
 	{
-		echo $this->template->render("register.html.php");
+		echo $this->template->render("register.html.php", ["csrf" => $this->csrfService->getHtmlCode("csrfRegister")]);
 	}
 	
 	public function register(array $data)
 	{
+		if(array_key_exists("csrf", $data))
+		{
+			if(!$this->csrfService->validateToken("csrfRegister", $data["csrf"]))
+			{
+				$this->showRegister();
+				return;
+			}
+		}
+		else
+		{
+			$this->showRegister();
+			return;
+		}
 		if(!array_key_exists("email", $data) OR !array_key_exists("password", $data))
 		{
 			$this->showRegister();
@@ -41,7 +58,7 @@ class RegisterController
 		}
 		else 
 		{
-			echo $this->template->render("register.html.php", ["email" => $data["email"]]);
+			$this->showRegister();
 			echo "User with this email already exists";
 		}
 	}
@@ -60,9 +77,22 @@ class RegisterController
 	}
 	public function changePw(array $data)
 	{
+		if(array_key_exists("csrf", $data))
+		{
+			if(!$this->csrfService->validateToken("csrfChangePW", $data["csrf"]))
+			{
+				$this->showChangePw();
+				return;
+			}
+		}
+		else
+		{
+			$this->showChangePw();
+			return;
+		}
 		if(!array_key_exists("password", $data) OR !array_key_exists("code", $data))
 		{
-			echo $this->template->render("changePassword.html.php");
+			$this->showChangePw();
 		}
 		else
 		{
@@ -72,7 +102,7 @@ class RegisterController
 	
 	public function showChangePw()
 	{
-		echo $this->template->render("changePassword.html.php");
+		echo $this->template->render("changePassword.html.php", ["csrf" => $this->csrfService->getHtmlCode("csrfChangePW")]);
 	}
 	
 	public function sendChangePwCode()

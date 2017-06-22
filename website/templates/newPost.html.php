@@ -7,6 +7,7 @@
 	<body>
 		<h1>New Post</h1>
 		<form method="POST">
+		<?php echo $csrf;?>
 			<label>
 				Title:
 				<input type="text" name="title"/>

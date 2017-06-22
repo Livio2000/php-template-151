@@ -42,6 +42,11 @@ class LoginController
 				return;
 			}
 		}
+		else
+		{
+			$this->showLogin();
+			return;
+		}
 		if(!array_key_exists("email", $data) OR !array_key_exists("password", $data))
 		{
 			$this->showLogin();
