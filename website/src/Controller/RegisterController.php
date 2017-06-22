@@ -35,7 +35,15 @@ class RegisterController
 			$this->showRegister();
 			return;
 		}
-		$this->registerService->reg($data{"email"}, $data{"password"});
+		if($this->registerService->reg($data["email"], $data["password"]))
+		{
+			header("Location: /");
+		}
+		else 
+		{
+			echo $this->template->render("register.html.php", ["email" => $data["email"]]);
+			echo "User with this email already exists";
+		}
 	}
 	
 	public function activate(array $data)
@@ -47,7 +55,7 @@ class RegisterController
 		}
 		else
 		{
-			$this->registerService->acti($data{"url"}, $data{"user_id"});
+			$this->registerService->acti($data["url"], $data["user_id"]);
 		}
 	}
 	public function changePw(array $data)
@@ -58,7 +66,7 @@ class RegisterController
 		}
 		else
 		{
-			$this->registerService->chpw($data{"password"}, $data{"code"});
+			$this->registerService->chpw($data["password"], $data["code"]);
 		}
 	}
 	

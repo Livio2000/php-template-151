@@ -1,6 +1,7 @@
 <?php
 namespace livio\Service\Security;
-class CSRFProtectionService {
+class CSRFProtectionService 
+{
 
 	private function store_in_session($key,$value)
 	{

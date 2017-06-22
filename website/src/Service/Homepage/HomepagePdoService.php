@@ -32,25 +32,21 @@ class HomepagePdoService implements  HomepageService
 			return "Error: " . $e->getMessage();
 		}
 	}
-	public function getAllLikes()
+	
+	public function getLikesByPostId($post_id, $isDislike)
 	{
 		try {
-			$stmt = $this->pdo->prepare("Select * FROM `like`");
+			$stmt = $this->pdo->prepare("Select * FROM `like` WHERE post_id=? AND isDislike=?");
+			$stmt->bindValue(1,$post_id);
+			$stmt->bindValue(2,$isDislike);
 			$stmt->execute();
-				
-			if($stmt->rowCount() >= 1)
-			{
-				return $stmt;
-			}
-			else
-			{
-				return NULL;
-			}
+			return $stmt->rowCount();
 		}
 		catch(PDOException $e) {
 			return "Error: " . $e->getMessage();
 		}
 	}
+	
 	public function getLikeByUserIdAndPostId($user_id, $post_id)
 	{
 		try {

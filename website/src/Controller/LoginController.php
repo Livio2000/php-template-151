@@ -4,6 +4,7 @@ namespace livio\Controller;
 
 use livio\SimpleTemplateEngine;
 use livio\Service\Login\LoginService;
+use livio\Service\Security\CSRFProtectionService;
 
 class LoginController
 {
@@ -13,23 +14,34 @@ class LoginController
 	private $template;
 
 	private $loginService;
+	
+	private $csrfService;
 	/**
 	 * @param ihrname\SimpleTemplateEngine
 	 * @param PDO
 	 */
-	public function __construct(SimpleTemplateEngine $template, LoginService $loginService)
+	public function __construct(SimpleTemplateEngine $template, LoginService $loginService, CSRFProtectionService $csrfService)
 	{
 		$this->template = $template;
 		$this->loginService = $loginService;
+		$this->csrfService = $csrfService;
 	}
 
 	public function showLogin() 
 	{
-		echo $this->template->render("login.html.php");
+		echo $this->template->render("login.html.php", ["csrf" => $this->csrfService->getHtmlCode("csrfLogin")]);
 	}
 	
 	public function login(array $data) 
 	{
+		if(array_key_exists("csrf", $data)) 
+		{
+			if(!$this->csrfService->validateToken("csrfLogin", $data["csrf"])) 
+			{
+				$this->showLogin();
+				return;
+			}
+		}
 		if(!array_key_exists("email", $data) OR !array_key_exists("password", $data))
 		{
 			$this->showLogin();
@@ -37,7 +49,7 @@ class LoginController
 		}
 		
 		
-		if($this->loginService->authenticate($data{"email"}, $data{"password"}))
+		if($this->loginService->authenticate($data["email"], $data["password"]))
 		{
 			$_SESSION["user_id"] = $this->loginService->getUserIdByEmail($data["email"]);
 			$_SESSION["email"] = $data["email"];
@@ -45,7 +57,7 @@ class LoginController
 		}
 		else 
 		{
-			echo $this->template->render("login.html.php", ["email" => $data["email"]]);
+			echo $this->template->render("login.html.php", ["email" => $data["email"] , "csrf" => $this->csrfService->getHtmlCode("csrfLogin")]);
 		}
 	}
 }

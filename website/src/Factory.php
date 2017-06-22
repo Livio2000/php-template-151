@@ -58,7 +58,8 @@ class Factory
 		return new Service\Security\CSRFProtectionService();
 	}
 	
-	public function getPasswordService() {
+	public function getPasswordService() 
+	{
 		return new Service\Security\PasswordService();
 	}
 }

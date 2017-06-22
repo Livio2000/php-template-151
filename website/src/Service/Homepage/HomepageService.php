@@ -4,7 +4,7 @@ namespace livio\Service\Homepage;
 Interface HomepageService
 {
 	public function getAllPost();
-	public function getAllLikes();
+	public function getLikesByPostId($post_id, $isDislike);
 	public function getLikeByUserIdAndPostId($user_id, $post_id);
 	public function addLike($user_id, $post_id, $isDislike);
 	public function changeLike($like_id, $isDislike);

@@ -32,16 +32,35 @@ class IndexController
   
   public function homepage() 
   {
-  	$posts = $this->homepageService->getAllPost();
-  	$likes = $this->homepageService->getAllLikes();
-    echo $this->template->render("hello.html.php", array('posts' => $posts, 'likes' => $likes));  
+  	$postsdb = $this->homepageService->getAllPost();
+  	$posts = array();
+  	$counter = 0;
+  	$likesNumber = 0;
+  	$dislikes = 0;
+  	if($postsdb != NULL)
+  	{
+	  	foreach ($postsdb as $post)
+	  	{
+	  		$likesNumber = 0;
+	  		$dislikes = 0;
+	  		$temp['id'] = $post['id'];
+	  		$temp['user_id'] = $post['user_id'];
+	  		$temp['title'] = $post['title'];
+	  		$temp['content'] = $post['content'];
+	  		$temp['likeCount'] = $this->homepageService->getLikesByPostId($post['id'], 0);
+	  		$temp['dislikeCount'] = $this->homepageService->getLikesByPostId($post['id'], 1);
+	  		$posts[$counter] = $temp;
+	  		$counter++;
+	  	}
+  	}
+    echo $this->template->render("home.html.php", array('posts' => $posts));  
   }
   
   public function like(array $data)
   {
-  	if ($_SESSION['user_id'] != "")
+  	if (isset($_SESSION['user_id']))
   	{
-  		$like = $this->homepageService->getLikeByUserIdAndPostId($_SESSION['user_id'], $data{"like"});
+  		$like = $this->homepageService->getLikeByUserIdAndPostId($_SESSION['user_id'], $data["like"]);
   		if($like != NULL)
   		{
   			if ($like['isDislike'] == 1)
@@ -55,7 +74,7 @@ class IndexController
   		}
   		else
   		{
-  			$this->homepageService->addLike($_SESSION['user_id'], $data{"like"}, 0);
+  			$this->homepageService->addLike($_SESSION['user_id'], $data["like"], 0);
   		}
   	}
 	else
@@ -66,9 +85,9 @@ class IndexController
   
   public function dislike(array $data)
   {
-  	if ($_SESSION['user_id'] != "")
+  	if (isset($_SESSION['user_id']))
   	{
-  		$like = $this->homepageService->getLikeByUserIdAndPostId($_SESSION['user_id'], $data{"dislike"});
+  		$like = $this->homepageService->getLikeByUserIdAndPostId($_SESSION['user_id'], $data["dislike"]);
   		if($like != NULL)
   		{
   			if ($like['isDislike'] == 0)
@@ -82,7 +101,7 @@ class IndexController
   		}
   		else
   		{
-  			$this->homepageService->addLike($_SESSION['user_id'], $data{"dislike"}, 1);
+  			$this->homepageService->addLike($_SESSION['user_id'], $data["dislike"], 1);
   		}
   	}
   	else
@@ -98,12 +117,12 @@ class IndexController
   
   public function addPost(array $data)
   {
-  	$this->homepageService->addPost($_SESSION['user_id'],$data{"title"}, $data{"content"});
+  	$this->homepageService->addPost($_SESSION['user_id'],$data["title"], $data["content"]);
   	header("Location: /");
   }
   
   public function deletePost(array $data)
   {
-  	$this->homepageService->deletePost($data{"deletePost"});
+  	$this->homepageService->deletePost($data["deletePost"]);
   }
 }

@@ -49,7 +49,7 @@ class RegisterPdoService implements  RegisterService
 		}
 			else
 			{
-				echo "user with this email already exists";
+				return false;
 			}
 		}
 					

@@ -10,11 +10,8 @@ require_once("../vendor/autoload.php");
 $config = parse_ini_file(__DIR__ . "/../config.ini", true);
 $factory = new Factory($config);
 $tmpl = $factory->getTemplateEngine();
-$pdo = $factory->getPDO();
-$loginService = $factory->getLoginService();
-$registerService = $factory->getRegisterService();
-$homepageService = $factory->getHomepageService();
-if($_SERVER["REQUEST_METHOD"] == "PUT") {
+if($_SERVER["REQUEST_METHOD"] == "PUT") 
+{
 	die();
 }
 if(strpos($_SERVER["REQUEST_URI"], '/activate') !== false)
@@ -28,12 +25,10 @@ if(strpos($_SERVER["REQUEST_URI"], '/activate') !== false)
 }
 else
 {
-	switch($_SERVER["REQUEST_URI"]) {	
-		case "testroute":
-			echo "Test skrrt";
-			break;
+	switch($_SERVER["REQUEST_URI"]) 
+	{	
 		case "/":
-			$ctr = new Controller\IndexController($tmpl, $homepageService, $pdo, $factory->getCSRFService());
+			$ctr = $factory->getIndexController();
 			if($_SERVER["REQUEST_METHOD"] == "POST")
 			{
 				if(array_key_exists('like',$_POST))
@@ -46,7 +41,7 @@ else
 				}
 				if(array_key_exists('logout',$_POST))
 				{
-					$_SESSION['user_id'] = "";
+					unset($_SESSION['user_id']);
 				}
 				if(array_key_exists('login',$_POST))
 				{
@@ -64,7 +59,8 @@ else
 			$ctr->homepage();
 			break;
 		case "/login":
-			$ctr = new Controller\LoginController($tmpl, $loginService);
+			$loginService = $factory->getLoginService();
+			$ctr = new Controller\LoginController($tmpl, $loginService, $factory->getCSRFService());
 			if($_SERVER["REQUEST_METHOD"] == "GET")
 			{
 				$ctr->showLogin();
@@ -112,8 +108,10 @@ else
 			break;
 		default:
 			$matches = [];
-			if(preg_match("|^/hello/(.+)$|", $_SERVER["REQUEST_URI"], $matches)) {
-				(new livio\Controller\IndexController($tmpl))->greet($matches[1]);
+			if(preg_match("|^/hello/(.+)$|", $_SERVER["REQUEST_URI"], $matches)) 
+			{
+				$ctr = $factory->getIndexController();
+				$ctr->homepage();
 				break;
 			}
 			echo "Not Found";
