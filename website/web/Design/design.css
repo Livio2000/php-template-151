@@ -1,6 +1,16 @@
 @CHARSET "UTF-8";
+html,body{
+	height: 100%;
+}
+html{
+	margin: auto;
+	background-color:lightblue;
+}
 body {
     background-color: beige;
+    padding:30px;
+    margin:10px;
+    box-shadow: 0 0 3px;
 }
 h1 {
     font-size: 40px;
@@ -10,4 +20,7 @@ form {
 }
 table{
 	clear:left;
+}
+a{
+	margin-left:10px;
 }

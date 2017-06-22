@@ -31,39 +31,22 @@ CREATE TABLE `post` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `post` (`id`, `user_id`, `title`, `content`) VALUES
-(1,	3,	'First post!',	'This is my first post!'),
-(6,	3,	'Second Post',	'This is my Second Post');
-
-DROP TABLE IF EXISTS `right`;
-CREATE TABLE `right` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) CHARACTER SET armscii8 NOT NULL,
-  `cancratecontent` tinyint(4) NOT NULL,
-  `candeleteanycontent` tinyint(4) NOT NULL,
-  `cancreateuser` tinyint(4) NOT NULL,
-  `candeleteuser` tinyint(4) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-INSERT INTO `right` (`id`, `name`, `cancratecontent`, `candeleteanycontent`, `cancreateuser`, `candeleteuser`) VALUES
-(1,	'admin',	1,	1,	1,	1);
+(7,	6,	'My first Post!',	'This is my first Post.'),
+(9,	6,	'Second Post',	'This is my second Post.');
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `right_id` int(11) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `isActivated` tinyint(4) NOT NULL,
   `activationCode` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`),
-  KEY `right_id` (`right_id`),
-  CONSTRAINT `user_ibfk_1` FOREIGN KEY (`right_id`) REFERENCES `right` (`id`)
+  UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `user` (`id`, `right_id`, `email`, `password`, `isActivated`, `activationCode`) VALUES
-(3,	1,	'livio.1234567890@gmail.com',	'$2y$10$yXFHsEZaJt7aqD06nzUXE.6q7b.hx2MpumJpa6.wS3aXD8BulABcW',	1,	'jnv1DOwHWWRLoGqk'),
-(4,	1,	'mario.gwerder@gmail.com',	'$2y$10$8H0wdWJL28dA7/Z6kUhQeex8MLmXHsnMo6FIwfbI9Q.iyCqlNy8Xy',	1,	'DCj006wBPe2Q5Gv5');
+INSERT INTO `user` (`id`, `email`, `password`, `isActivated`, `activationCode`) VALUES
+(4,	'mario.gwerder@gmail.com',	'$2y$10$8H0wdWJL28dA7/Z6kUhQeex8MLmXHsnMo6FIwfbI9Q.iyCqlNy8Xy',	1,	'DCj006wBPe2Q5Gv5'),
+(6,	'livio.1234567890@gmail.com',	'$2y$10$gQpy42h4IafTK6FZtAG5TOhRTtxEBbmuCxNgYxbJMezhhEF0.7TmC',	1,	'CyMi6Dro2NuySgVY');
 
--- 2017-06-22 08:16:15
+-- 2017-06-22 20:03:07

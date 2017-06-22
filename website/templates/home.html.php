@@ -36,7 +36,7 @@
 			echo "<a href='newPost'>New Post</a>";
 		}
 	echo "<table border='1'>";
-	echo "<tr><th>Title</th> <th>Content</th> <th></th> <th>Likes</th> <th>Dislikes</th></tr>";
+	echo "<tr><th>Title</th> <th>Content</th> <th></th> <th>Likes</th> <th>Dislikes</th><th></th></tr>";
 	if($posts != NULL)
 	{
 		foreach ($posts as $row)
